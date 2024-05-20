@@ -9,11 +9,7 @@ public class Note {
     private String createdAt;
     private int userID;
 
-    public Note() {
-        this.title = "Nincs_cím";
-        this.category = "Nincs_kategória";
-        this.content = "Nincs_tartalom";
-    }
+    public Note() { }
 
     public Note(String title, String category, String content, String createdAt, int userID) {
         this.title = title;

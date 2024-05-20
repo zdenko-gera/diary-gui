@@ -5,6 +5,8 @@ import hu.naplogui.dao.NoteDAO;
 import hu.naplogui.dao.NoteDAOImpl;
 import hu.naplogui.model.Note;
 
+import java.util.List;
+
 public class NoteController {
     private NoteDAO dao;
     private static NoteController single_instance = null;
@@ -24,6 +26,8 @@ public class NoteController {
     public boolean add(Note note) {
         return dao.add(note);
     }
+
+    public List<Note> find(Note filter) {return dao.find(filter);}
 
 
 }
