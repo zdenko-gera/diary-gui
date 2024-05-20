@@ -68,12 +68,32 @@ public class listNotes extends Stage {
             table.setItems(FXCollections.observableArrayList(filtered));
         });
 
+        table.setRowFactory( tv -> {
+            var row = new TableRow<Note>();
+            row.setOnMouseClicked( click -> {
+                var note = row.getItem();
+                Dialog<Void> dialog = new Dialog<>();
+                dialog.setTitle(note.getTitle());
+                VBox parentBox = new VBox(new Text(note.getContent()));
+                dialog.getDialogPane().setContent(parentBox);
+                dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+                dialog.showAndWait();
+            });
+            return row;
+        });
+
 
 
         //List<Note> notes = NoteController.getInstance().find(new Note());
 
 
         root.getChildren().add(table);
+        Button closeBtn = new Button("Bezárás");
+        root.getChildren().add(closeBtn);
+
+        closeBtn.setOnAction(click -> {
+            stage.close();
+        });
 
 
     }
