@@ -1,5 +1,7 @@
 package hu.naplogui.view;
 
+import hu.naplogui.controller.NoteController;
+import hu.naplogui.model.Note;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
@@ -7,6 +9,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.sqlite.date.DateFormatUtils;
+
+import java.util.Date;
 
 public class addNote extends Stage {
     public addNote() {
@@ -45,12 +50,22 @@ public class addNote extends Stage {
         stage.show();
 
         saveBtn.setOnAction(e-> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Cím");
-            alert.setHeaderText("Az ablak tartalom felső header része");
-            alert.setContentText("Részletesebb leírás a header text alatt");
+            if (titleInput.getText().isEmpty() || contentInput.getText().isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Üres mezők!");
+                alert.setHeaderText("Töltsd ki az üres mezőket!");
+                alert.showAndWait();
+                return;
+            }
 
-            alert.showAndWait();
+            if(NoteController.getInstance().add(new Note(titleInput.getText(), categoryInput.getValue(), contentInput.getText(),  DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:SS"), 1))) {
+                stage.close();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Siker!");
+                alert.setHeaderText("Sikeresen hozzáadtál egy új bejegyzést a naplódhoz.");
+
+                alert.showAndWait();
+            }
         });
 
         cancelBtn.setOnAction(e-> {

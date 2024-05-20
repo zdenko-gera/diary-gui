@@ -1,5 +1,6 @@
 package hu.naplogui;
 
+import hu.naplogui.dao.ConfigManager;
 import hu.naplogui.view.addNote;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -35,6 +36,7 @@ public class App extends Application {
         stage.setScene(scene);
         stage.setTitle("Napló projekt");
         stage.show();
+        //System.out.println(ConfigManager.getValue("db.url"));
     }
 
     public static void main(String[] args) {
