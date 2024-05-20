@@ -11,6 +11,19 @@ public class Note {
 
     public Note() { }
 
+    public Note(String title, String category) {
+        if(title != null && !title.isEmpty()) {
+            this.title = title;
+        } else {
+            this.title = null;
+        }
+        if(category != null && !category.isEmpty()) {
+            this.category = category;
+        } else {
+            this.category = null;
+        }
+    }
+
     public Note(String title, String category, String content, String createdAt, int userID) {
         this.title = title;
         this.category = category;
