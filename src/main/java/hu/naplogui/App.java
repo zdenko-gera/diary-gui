@@ -1,15 +1,15 @@
 package hu.naplogui;
 
 import hu.naplogui.controller.NoteController;
-import hu.naplogui.dao.ConfigManager;
 import hu.naplogui.model.Note;
 import hu.naplogui.view.addNote;
 import hu.naplogui.view.listNotes;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import java.util.Random;
 
@@ -41,6 +41,9 @@ public class App extends Application {
         MenuBar mainMenuBar = new MenuBar();
         noteMenu.getItems().addAll(addNoteMI, listNotesMI);
         mainMenuBar.getMenus().addAll(noteMenu/*,userMenu*/);
+        appTitle.getStyleClass().add("title");
+        appTitle.setTextAlignment(TextAlignment.CENTER);
+        appTitle.setPadding(new Insets(40, 0,40,0));;
 
         addNoteMI.setOnAction(e-> {
             new addNote();
@@ -51,7 +54,13 @@ public class App extends Application {
         });
 
         root.getChildren().addAll(mainMenuBar, appTitle);
-        var scene = new Scene(root, 500, 400);
+        var scene = new Scene(root);
+        try{
+            scene.getStylesheets().add(this.getClass().getResource("/styles/app.css").toExternalForm());
+        } catch (NullPointerException e) {
+            System.err.println("CSS fájl nem található: " + e.getMessage());
+        }
+
         stage.setScene(scene);
         stage.setTitle("Napló projekt");
         stage.show();

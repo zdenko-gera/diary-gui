@@ -29,5 +29,7 @@ public class NoteController {
 
     public List<Note> find(Note filter) {return dao.find(filter);}
 
+    public boolean delete(Note deleteNote) {return dao.delete(deleteNote);}
+
 
 }

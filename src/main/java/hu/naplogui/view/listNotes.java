@@ -1,10 +1,12 @@
 package hu.naplogui.view;
 import hu.naplogui.controller.NoteController;
 import hu.naplogui.model.Note;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -68,26 +70,51 @@ public class listNotes extends Stage {
             table.setItems(FXCollections.observableArrayList(filtered));
         });
 
-        table.setRowFactory( tv -> {
-            var row = new TableRow<Note>();
-            row.setOnMouseClicked( click -> {
-                var note = row.getItem();
-                Dialog<Void> dialog = new Dialog<>();
-                dialog.setTitle(note.getTitle());
-                VBox parentBox = new VBox(new Text(note.getContent()));
-                dialog.getDialogPane().setContent(parentBox);
-                dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-                dialog.showAndWait();
-            });
-            return row;
+        root.getChildren().add(table);
+        Button viewBtn = new Button("Megtekintés");
+
+        Button deleteBtn = new Button("Törlés");
+        root.getChildren().addAll(viewBtn, deleteBtn);
+
+        viewBtn.setOnAction(e -> {
+            Note selectedItem = table.getSelectionModel().getSelectedItem();
+            if(selectedItem!= null) {
+                new ViewContent(selectedItem);
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Nincs kijelölt bejegyzés");
+                alert.setHeaderText("Válassz ki egy bejegyzést, amit meg szeretnél tekinteni!");
+                alert.showAndWait();
+            }
+
+
         });
+
+        deleteBtn.setOnAction(e -> {
+            Note selectedItem = table.getSelectionModel().getSelectedItem();
+            if(selectedItem!= null) {
+                if (NoteController.getInstance().delete(selectedItem)) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Sikeres törlés");
+                    alert.setHeaderText("Sikeresen törölted a \"" + selectedItem.getTitle() + "\" című bejegyzést.");
+                    alert.showAndWait();
+                }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Nincs kijelölt bejegyzés");
+                alert.setHeaderText("Válassz ki egy bejegyzést, amit törölni szeretnél!");
+                alert.showAndWait();
+            }
+        });
+
+
 
 
 
         //List<Note> notes = NoteController.getInstance().find(new Note());
 
 
-        root.getChildren().add(table);
+
         Button closeBtn = new Button("Bezárás");
         root.getChildren().add(closeBtn);
 

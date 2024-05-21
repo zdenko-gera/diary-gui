@@ -7,4 +7,6 @@ import java.util.List;
 public interface NoteDAO {
     boolean add(Note note);
     List<Note> find(Note note);
+
+    boolean delete(Note deleteNote);
 }

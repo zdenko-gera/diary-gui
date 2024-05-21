@@ -30,7 +30,9 @@ public class NoteDAOImpl implements NoteDAO {
     private enum Query{
         INSERT("INSERT INTO note (title, category, content, created_at, user_id) VALUES(?,?,?,?,?);"),
         SELECT("SELECT * FROM note;"),
-        FILTER("SELECT * FROM note WHERE category = ?;");
+        FILTER("SELECT * FROM note WHERE category = ?;"),
+
+        DELETE("DELETE FROM note WHERE created_at = ?;");
 
         private String command;
 
@@ -95,5 +97,23 @@ public class NoteDAOImpl implements NoteDAO {
                 .filter(utazas -> filter.getCreatedAt() == null || utazas.getCreatedAt() == filter.getCreatedAt())
                 .filter(utazas -> filter.getUserID() == 0 || utazas.getUserID() == filter.getUserID())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean delete(Note deleteNote) {
+        try(Connection c = DriverManager.getConnection(CONN);
+            PreparedStatement pst = c.prepareStatement(Query.DELETE.command, Statement.RETURN_GENERATED_KEYS))
+        {
+            pst.setString(1, deleteNote.getCreatedAt());
+
+            int affectedRows = pst.executeUpdate();
+
+            return affectedRows == 1;
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
